@@ -1,9 +1,36 @@
 export const initialState = {
-    basket: [],
+    basket: [
+        {
+            id : "123456",
+            title : "Midnight Sun",
+            price: 19.32,
+            rating: 5,
+            image : "https://images-na.ssl-images-amazon.com/images/I/41dd3tjpdUL._SX329_BO1,204,203,200_.jpg"
+        },
+        {
+            id: "123456",
+            title: "Midnight Sun",
+            price: 19.32,
+            rating: 5,
+            image: "https://images-na.ssl-images-amazon.com/images/I/41dd3tjpdUL._SX329_BO1,204,203,200_.jpg"
+        },
+        {
+            id: "123456",
+            title: "Midnight Sun",
+            price: 19.32,
+            rating: 5,
+            image: "https://images-na.ssl-images-amazon.com/images/I/41dd3tjpdUL._SX329_BO1,204,203,200_.jpg"
+        }
+    ],
     user: null,
 };
 
+export const getBasketTotal = (basket) =>
+    basket?.reduce(
+        (amount, item) => item.price + amount, 0);
+
 function reducer(state, action) {
+    console.log(action);
     switch (action.type) {
         case 'ADD_TO_BASKET':
             return { 
@@ -11,7 +38,22 @@ function reducer(state, action) {
                 basket: [...state.basket, action.item], 
             };
         case 'REMOVE_FROM_BASKET':
-            return { state };
+            let newBasket = [ ...state.basket ];
+
+            const index = state.basket.findIndex(
+                (basketItem) => basketItem.id === action.id
+            );
+
+            if (index >= 0) {
+                newBasket.splice(index, 1);
+            } else {
+                console.warn(`Can't remove product (id: ${action.id}) from basket`);
+            }
+
+            return { 
+                ...state, 
+                basket: newBasket
+            };
         default:
             return state;
     }
